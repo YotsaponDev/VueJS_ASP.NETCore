@@ -16,6 +16,8 @@
   width: 230px;
   overflow: hidden;
   background-color:white;
+  -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
+  transition: width 1s;
 }
 
 .icon-bar{
@@ -29,6 +31,32 @@
   margin-left: 230px;
   margin-top: 20px;
 }
+
+/* content and left side on click */
+.left-side.clickToMD{
+  position: fixed;
+  height: 100%;
+  width: 50px;
+  overflow: hidden;
+  background-color:white;
+  -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
+  transition: width 1s;
+}
+.left-side.clickToLG{
+  position: fixed;
+  height: 100%;
+  width: 230px;
+  overflow: hidden;
+  background-color:white;
+  -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
+  transition: width 1s;
+}
+.content.clickToMD{
+  margin-left: 50px;
+  margin-top: 20px;
+}
+/* ------------------------------ */
+
 @media screen and (max-width: 991px) {
   .left-side{
     position: fixed;
@@ -36,6 +64,8 @@
     width: 50px;
     overflow: hidden;
     background-color:white;
+    -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
+    transition: width 1s;
   }
   .content{
     margin-left: 50px;
@@ -49,13 +79,14 @@
     width: 0px;
     overflow: hidden;
     background-color:white;
+    -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
+    transition: width 1s;
   }
   .icon-bar{
     padding-top: 13px;
     position: relative;
-    right: 18px;
-    left: unset !important;
-    text-align: right;
+    left: 18px;
+    text-align: left;
   }
   .content{
     margin-left: 0px;
