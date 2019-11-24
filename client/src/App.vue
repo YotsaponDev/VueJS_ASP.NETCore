@@ -11,9 +11,10 @@
       </div>
     </div>
     <div :class="classLeftSide">
-       <!-- <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> -->
-      
+      <div class="mb-2"></div>
+      <router-link v-on:click.native="ClickLink()" v-for="v in routerName" :key="v.name" :to="v.link" tag="div" class="link">
+        <i :class="v.icon"></i><b :class="['ml-2',classLinkText]">{{v.name}}</b>
+      </router-link>  
     </div>
     <div :class="classContent">
       <router-view/> 
@@ -27,11 +28,24 @@ export default {
     return {
       classLeftSide: 'left-side',
       classContent: 'content',
+      classLinkText: 'linkText',
       iconBarValue: false,
       window: {
         width: 0,
         height: 0
-      }
+      },
+      routerName: [
+        {
+          name:"หน้าแรก",
+          link:"/",
+          icon:"fas fa-home"
+        },
+        {
+          name:"เกี่ยวกับ",
+          link:"/about",
+          icon:"fas fa-address-card"
+        }
+      ]
     }
   },
   created() {
@@ -42,23 +56,33 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    ClickLink(){
+      if(this.window.width < 768){
+        this.classLeftSide = 'left-side'
+        this.iconBarValue = this.iconBarValue == true ? false : true
+      }
+    },
     ClickIconBar(){
       this.iconBarValue = this.iconBarValue == true ? false : true
       if(this.window.width >= 992){
         if(this.iconBarValue){
           this.classLeftSide = 'left-side clickToMD'
           this.classContent = 'content clickToMD'
+          this.classLinkText = 'linkText none'
         }else{
           this.classLeftSide = 'left-side'
           this.classContent = 'content'
+          this.classLinkText = 'linkText unset'
         }
       }else if(this.window.width >= 768){
         if(this.iconBarValue){
           this.classLeftSide = 'left-side clickToLG'
           this.classContent = 'content'
+          this.classLinkText = 'linkText unset'
         }else{
           this.classLeftSide = 'left-side'
           this.classContent = 'content'
+          this.classLinkText = 'linkText'
         }
       }else{
         if(this.iconBarValue){
@@ -79,7 +103,7 @@ export default {
 
         this.classLeftSide = 'left-side'
         this.classContent = 'content'
-      
+        this.classLinkText = 'linkText'
       
     }
   }
@@ -89,7 +113,7 @@ export default {
 <style>
 
 body{
-  background-color: #f1f2f7;
+  background-color: #f1f1f1 !important;
   /* margin-left: 0px; */
   margin: 0;
 }
