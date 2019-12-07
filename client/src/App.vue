@@ -2,12 +2,15 @@
   <div id="app">
     <div class="top-nav">
       <div class="icon-bar">
-        <span v-show="iconBarValue" v-on:click="ClickIconBar()" style="font-size: 20px; color: #99abb4 !important; cursor:pointer;">
-          <i class="fas fa-times"></i>
-        </span>
-        <span v-show="!iconBarValue" v-on:click="ClickIconBar()" style="font-size: 20px; color: #99abb4 !important; cursor:pointer;">
-          <i class="fas fa-bars"></i>
-        </span>
+          <span v-show="iconBarValue" v-on:click="ClickIconBar()" class="icon-bar-icon bars">
+            <i class="fas fa-times"></i>
+          </span>
+          <span v-show="!iconBarValue" v-on:click="ClickIconBar()" class="icon-bar-icon bars">
+            <i class="fas fa-bars"></i>
+          </span>
+          <span class="icon-bar-icon user" @click="ClickUserMenu()">
+            <i class="fas fa-user"></i>
+          </span>   
       </div>
     </div>
     <div :class="classLeftSide">
@@ -17,6 +20,12 @@
       </router-link>  
     </div>
     <div :class="classContent">
+      <div :class="classUserMenu">
+        <router-link v-on:click.native="ClickUserMenuAfter()" v-for="v in routerUser" :key="v.name" :to="v.link" 
+          tag="div" class="linkUserMenu">
+          <i :class="v.icon"></i> {{v.name}}
+        </router-link>  
+      </div>
       <router-view/> 
     </div>
   </div>
@@ -30,6 +39,8 @@ export default {
       classContent: 'content',
       classLinkText: 'linkText',
       iconBarValue: false,
+      iconUserMenuValue: false,
+      classUserMenu: 'user-menu none',
       window: {
         width: 0,
         height: 0
@@ -44,6 +55,18 @@ export default {
           name:"เกี่ยวกับ",
           link:"/about",
           icon:"fas fa-address-card"
+        }
+      ],
+      routerUser: [
+        {
+          name:"แก้ไขข้อมูลส่วนตัว",
+          link:"/user_config",
+          icon:"fas fa-user-cog"
+        },
+        {
+          name:"ออกจากระบบ",
+          link:"/logout",
+          icon:"fas fa-sign-out-alt"
         }
       ]
     }
@@ -63,6 +86,9 @@ export default {
       }
     },
     ClickIconBar(){
+      this.iconUserMenuValue = false
+      this.classUserMenu = 'user-menu none'
+      
       this.iconBarValue = this.iconBarValue == true ? false : true
       if(this.window.width >= 992){
         if(this.iconBarValue){
@@ -94,6 +120,18 @@ export default {
         }
       }
     },
+    ClickUserMenu(){
+      this.iconUserMenuValue = !this.iconUserMenuValue
+      if(this.iconUserMenuValue){
+        this.classUserMenu = 'user-menu unset'
+      }else{
+        this.classUserMenu = 'user-menu none'
+      }
+    },
+    ClickUserMenuAfter(){
+      this.iconUserMenuValue = false
+      this.classUserMenu = 'user-menu none'
+    },
     handleResize() {
       this.iconBarValue = false
       this.window.width = window.innerWidth;
@@ -104,6 +142,8 @@ export default {
         this.classLeftSide = 'left-side'
         this.classContent = 'content'
         this.classLinkText = 'linkText'
+        this.iconUserMenuValue = false
+        this.classUserMenu = 'user-menu none'
       
     }
   }
@@ -118,7 +158,7 @@ body{
   margin: 0;
 }
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Bai Jamjuree', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
