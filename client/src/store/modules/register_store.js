@@ -1,4 +1,5 @@
 import axios from "axios";
+var uuidv4 = require('uuid/v4');
 
 const state = {
     data:[],
@@ -86,7 +87,7 @@ const actions = {
     },
     postData: (context) => {
         const obj = {
-            member_id: state.obj.member_id,
+            member_id: uuidv4(),
             firstname: state.obj.firstname,
             lastname: state.obj.lastname,
             birthday: state.obj.birthday,
@@ -97,6 +98,8 @@ const actions = {
             created_at: new Date(),
             updated_at: new Date()
         }
+        console.log('objobjobj',obj)
+        return
         return new Promise((resolve, reject) => {
             axios.post(siteapi + "/api/register", obj)
             .then(response => {
