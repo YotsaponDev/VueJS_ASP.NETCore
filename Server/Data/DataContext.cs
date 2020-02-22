@@ -11,7 +11,6 @@ namespace Core.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options){}
 
-        public DbSet<LawsEntity> laws { get; set; }
-        public DbSet<UserEntity> user { get; set; }
+        public DbSet<MemberEntity> member { get; set; }
     }
 }

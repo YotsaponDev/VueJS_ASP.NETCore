@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace Todo.Models
 {
-    public class UserReturnViewModel
+    public class MemberReturnViewModel
     {
-        public Guid id { get; set; }
+        public Guid member_id { get; set; }
 
         public string firstname { get; set; }
 
         public string lastname { get; set; }
 
-        public string full_company_name { get; set; }
+        public DateTime? birthday { get; set; }
 
-        public string type { get; set; }
-
-        public string username { get; set; }
+        public string sex { get; set; }
 
         public string email { get; set; }
+
+        public string password { get; set; }
     }
 }

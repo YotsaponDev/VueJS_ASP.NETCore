@@ -9,40 +9,44 @@ using Server.Models;
 using Microsoft.Extensions.Logging;
 using Core.Data;
 using Todo.Models;
-using Server.Models.Laws;
+using Server.Models.Member;
+using Microsoft.AspNetCore.Authorization;
+using System.Net.Http.Headers;
 
 namespace Server.Controllers
 {
-    [Route("api/Laws")]
-    public class LawsController : Controller
+    [Authorize]
+    [Route("api/Member")]
+    public class MemberController : Controller
     {
-        private ILogger<LawsController> _logger;
+        private ILogger<MemberController> _logger;
 
-        private readonly ILaws _laws;
+        private readonly IMember _member;
 
-        public LawsController(ILaws laws)
+        public MemberController(IMember member)
         {
-            _laws = laws;
+            _member = member;
         }
 
         /// <summary>
-        /// Laws get all data
+        /// Member get all data
         /// </summary>
         /// <remarks>
-        /// Laws get all data
+        /// Member get all data
         /// </remarks>
         /// <returns>Return all data</returns>
         /// <response code="200">Returns all data</response>
         /// <response code="500">Error Occurred</response>  
+        [AllowAnonymous]
         [HttpGet("")]
-        [ProducesResponseType(typeof(List<LawsViewModel>), 200)]
+        [ProducesResponseType(typeof(List<MemberViewModel>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult GetAll()
         {
             try
             {
-                var data = _laws.GetAll();
+                var data = _member.GetAll();
                 return Json(data);
             }
             catch (Exception ex)
@@ -53,23 +57,24 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// Laws get By Id
+        /// Member get By Id
         /// </summary>
         /// <remarks>
-        /// Laws get By Id
+        /// Member get By Id
         /// </remarks>
         /// <returns>Return all data</returns>
         /// <response code="200">Returns the item</response>
         /// <response code="500">Error Occurred</response>  
+        [AllowAnonymous]
         [HttpGet("GetById")]
-        [ProducesResponseType(typeof(List<LawsViewModel>), 200)]
+        [ProducesResponseType(typeof(List<MemberViewModel>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult GetById(Guid id)
         {
             try
             {
-                var data = _laws.GetById(id);
+                var data = _member.GetById(id);
                 return Json(data);
             }
             catch (Exception ex)
@@ -80,27 +85,32 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// Laws create item
+        /// Member get By Id via JWT
         /// </summary>
         /// <remarks>
-        /// Laws create item
+        /// Member get By Id via JWT
         /// </remarks>
-        /// <returns>Return create item</returns>
+        /// <returns>Return all data</returns>
         /// <response code="200">Returns the item</response>
         /// <response code="500">Error Occurred</response>  
-        [HttpPost]
-        [ProducesResponseType(typeof(List<LawsViewModel>), 200)]
+        [HttpGet("GetByIdViaJWT")]
+        [ProducesResponseType(typeof(MemberReturnViewModel), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public IActionResult Create([FromBody] LawsEntity model)
+        public IActionResult GetByIdViaJWT()
         {
             try
             {
-                if (model != null)
+                var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                if (authHeader == null)
                 {
-                    _laws.Create(model);
+                    throw new Exception("AuthorizationNone");
                 }
-                return Json(model);
+                else
+                {
+                    var data = _member.GetByIdViaJWT(authHeader.ToString());
+                    return Json(data);
+                }
             }
             catch (Exception ex)
             {
@@ -110,19 +120,86 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// Laws Update item
+        /// Member create item
         /// </summary>
         /// <remarks>
-        /// Laws Update item
+        /// Member create item
+        /// </remarks>
+        /// <returns>Return create item</returns>
+        /// <response code="200">Returns the item</response>
+        /// <response code="409">Conflict</response>  
+        [AllowAnonymous]
+        [HttpPost]
+        [ProducesResponseType(typeof(List<MemberViewModel>), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        public IActionResult Create([FromBody] MemberEntity model)
+        {
+            try
+            {
+                if (model != null)
+                {
+                    var x = _member.Create(model);
+                    return Json(x);
+                }
+                else
+                {
+                    return Json(model);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, $"{ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Member Login
+        /// </summary>
+        /// <remarks>
+        /// Member Login
+        /// </remarks>
+        /// <returns>Return member login</returns>
+        /// <response code="200">Returns token</response>
+        /// <response code="500">Error Occurred</response>  
+        [AllowAnonymous]
+        [Route("Login")]
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public IActionResult Login([FromBody] MemberLoginViewModel model)
+        {
+            try
+            {
+                if (model != null)
+                {
+                   var x = _member.Login(model);
+                    return Json(x);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogCritical($"Exception while get list of items.", ex);
+                return StatusCode(401, "LoginFailure");
+            }
+        }
+
+        /// <summary>
+        /// Member Update item
+        /// </summary>
+        /// <remarks>
+        /// Member Update item
         /// </remarks>
         /// <returns>Return create item</returns>
         /// <response code="200">Returns the item</response>
         /// <response code="500">Error Occurred</response>  
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(List<LawsViewModel>), 200)]
+        [ProducesResponseType(typeof(List<MemberViewModel>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public IActionResult Update(Guid id, [FromBody] LawsEntity model)
+        public IActionResult Update(Guid id, [FromBody] MemberEntity model)
         {
             try
             {
@@ -132,7 +209,7 @@ namespace Server.Controllers
                 }
                 else
                 {
-                    var res = _laws.Update(id, model);
+                    var res = _member.Update(id, model);
                     return Json(res);
                 }
             }
@@ -144,16 +221,16 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// Laws Update item
+        /// Member Update item
         /// </summary>
         /// <remarks>
-        /// Laws Update item
+        /// Member Update item
         /// </remarks>
         /// <returns>Return create item</returns>
         /// <response code="200">Returns the item</response>
         /// <response code="500">Error Occurred</response>  
         [HttpDelete("{id}")]
-        [ProducesResponseType(typeof(List<LawsViewModel>), 200)]
+        [ProducesResponseType(typeof(List<MemberViewModel>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult Delete(Guid id)
@@ -166,7 +243,7 @@ namespace Server.Controllers
                 }
                 else
                 {
-                    var res = _laws.Delete(id);
+                    var res = _member.Delete(id);
                     return Json(res);
                 }
             }

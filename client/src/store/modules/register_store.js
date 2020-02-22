@@ -1,5 +1,4 @@
 import axios from "axios";
-var uuidv4 = require('uuid/v4');
 
 const state = {
     data:[],
@@ -61,7 +60,6 @@ const mutations = {
         key,
         data
     }) => {
-        console.log('sssss',key,data)
         state.obj[key] = data
     },
 }
@@ -87,7 +85,6 @@ const actions = {
     },
     postData: (context) => {
         const obj = {
-            member_id: uuidv4(),
             firstname: state.obj.firstname,
             lastname: state.obj.lastname,
             birthday: state.obj.birthday,
@@ -96,10 +93,8 @@ const actions = {
             password: state.obj.password,
 
             created_at: new Date(),
-            updated_at: new Date()
+            updated_at: null
         }
-        console.log('objobjobj',obj)
-        return
         return new Promise((resolve, reject) => {
             axios.post(siteapi + "/api/register", obj)
             .then(response => {
@@ -119,6 +114,7 @@ const actions = {
                 sex: state.obj.sex,
                 email: state.obj.email,
                 password: state.obj.password,
+                updated_at: new Date()
             })
             .then(response => {
                 context.commit("UPDATE_DATA_BYID", payload)

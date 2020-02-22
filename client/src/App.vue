@@ -52,6 +52,11 @@ export default {
           icon:"fas fa-home"
         },
         {
+          name:"ลงทะเบียน",
+          link:"/register",
+          icon:"fas fa-user-plus"
+        },
+        {
           name:"เกี่ยวกับ",
           link:"/about",
           icon:"fas fa-address-card"

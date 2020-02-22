@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Server.Models.User;
+using Server.Models.Member;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,29 +14,29 @@ using System.Threading.Tasks;
 
 namespace Todo.Models
 {
-    public class UserRepository : IUser
+    public class MemberRepository : IMember
     {
         private DataContext _context;
 
         private IConfiguration configuration;
 
-        public UserRepository(DataContext context, IConfiguration iConfig)
+        public MemberRepository(DataContext context, IConfiguration iConfig)
         {
             _context = context;
             configuration = iConfig;
         }
 
-        public List<UserEntity> GetAll()
+        public List<MemberEntity> GetAll()
         {
-            return _context.user.Where(x => x.deleted_at == null).ToList();
+            return _context.member.ToList();
         }
 
-        public UserEntity GetById(Guid id)
+        public MemberEntity GetById(Guid id)
         {
-            return _context.user.Find(id);
+            return _context.member.Find(id);
         }
 
-        public UserReturnViewModel GetByIdViaJWT(string authHeader)
+        public MemberReturnViewModel GetByIdViaJWT(string authHeader)
         {
             var handler = new JwtSecurityTokenHandler();
             string[] auth = authHeader.Split(" ");
@@ -49,30 +49,28 @@ namespace Todo.Models
             var lifeTime = new JwtSecurityTokenHandler().ReadToken(auth[1]).ValidTo.ToLocalTime();
 
             var id = handler.ReadJwtToken(auth[1]).Payload.Jti;
-            var user = _context.user.Find(Guid.Parse(id));
-            var data = new UserReturnViewModel();
-            data.id = user.id;
-            data.firstname = user.firstname;
-            data.lastname = user.lastname;
-            data.username = user.username;
-            data.full_company_name = user.full_company_name;
-            data.type = user.type;
-            data.email = user.email;
+            var member = _context.member.Find(Guid.Parse(id));
+            var data = new MemberReturnViewModel();
+            data.member_id = member.member_id;
+            data.firstname = member.firstname;
+            data.lastname = member.lastname;
+            data.birthday = member.birthday;
+            data.sex = member.sex;
+            data.email = member.email;
 
             return data;
         }
 
-        public UserEntity Create(UserEntity model)
+        public MemberEntity Create(MemberEntity model)
         {
 
-            var user = _context.user.Where(x => x.username == model.username || x.email == model.email).FirstOrDefault();
+            var member = _context.member.Where(x => x.email == model.email).FirstOrDefault();
 
-            if(user == null)
+            if(member == null)
             {
-                model.id = Guid.NewGuid();
-                model.deleted_at = null;
+                model.member_id = Guid.NewGuid();
                 model.password = StringToMD5(model.password);
-                _context.user.Add(model);
+                _context.member.Add(model);
                 _context.SaveChanges();
 
                 model.password = null;
@@ -80,27 +78,24 @@ namespace Todo.Models
             }
             else
             {
-                if (user.username == model.username)
-                {
-                    throw new Exception("Username already exists");
-                } else if (user.email == model.email)
+                if (member.email == model.email)
                 {
                     throw new Exception("Email already exists");
                 }
                 else
                 {
-                    throw new Exception("Username and Email already exists");
+                    throw new Exception("Error");
                 }
                 
             } 
         }
 
-        public object Login(UserLoginViewModel model)
+        public object Login(MemberLoginViewModel model)
         {
             var checkPassword = StringToMD5(model.password);
-            var user = _context.user.Where(x => x.username == model.username && x.password == checkPassword).FirstOrDefault();
+            var member = _context.member.Where(x => x.email == model.email && x.password == checkPassword).FirstOrDefault();
 
-            if (user == null)
+            if (member == null)
             {
                 throw new Exception();
             }
@@ -108,11 +103,11 @@ namespace Todo.Models
             {
                 var claims = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Jti, user.id.ToString())
-                    //new Claim(JwtRegisteredClaimNames.NameId, user.username),
-                    //new Claim(JwtRegisteredClaimNames.GivenName, user.firstname),
-                    //new Claim(JwtRegisteredClaimNames.FamilyName, user.lastname),
-                    //new Claim(JwtRegisteredClaimNames.Email, user.email)
+                    new Claim(JwtRegisteredClaimNames.Jti, member.member_id.ToString())
+                    //new Claim(JwtRegisteredClaimNames.NameId, member.username),
+                    //new Claim(JwtRegisteredClaimNames.GivenName, member.firstname),
+                    //new Claim(JwtRegisteredClaimNames.FamilyName, member.lastname),
+                    //new Claim(JwtRegisteredClaimNames.Email, member.email)
                 };
                 string key = configuration.GetSection("JWT").GetSection("SecurityKey").Value;
                 var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
@@ -141,13 +136,12 @@ namespace Todo.Models
             }
         }
 
-        public UserEntity Update(Guid id, UserEntity modelUpdate)
+        public MemberEntity Update(Guid id, MemberEntity modelUpdate)
         {
-            var data = _context.user.Find(id);
+            var data = _context.member.Find(id);
 
             data.firstname = modelUpdate.firstname;
             data.lastname = modelUpdate.lastname;
-            data.is_active = modelUpdate.is_active;
             //data.created_by = modelUpdate.created_by;
             //data.created_at = modelUpdate.created_at;
             data.updated_at = DateTime.Now;
@@ -157,15 +151,18 @@ namespace Todo.Models
             return data;
         }
 
-        public UserEntity Delete(Guid id)
+        public MemberEntity Delete(Guid member_id)
         {
-            var data = _context.user.Find(id);
+            var member = new MemberEntity()
+            {
+                member_id = member_id
+            };
 
-            data.deleted_at = DateTime.Now;
+            var data = _context.member.Remove(member);
 
             _context.SaveChanges();
 
-            return data;
+            return member;
         }  
     }
 }

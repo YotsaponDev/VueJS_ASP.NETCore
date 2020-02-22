@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Todo.Models
 {
-    public class UserLoginViewModel
+    public class MemberLoginViewModel
     {
-        public string username { get; set; }
+        public string email { get; set; }
 
         public string password { get; set; }
 

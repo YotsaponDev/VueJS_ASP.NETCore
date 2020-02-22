@@ -80,6 +80,7 @@
   transition: width 0.3s;
 }
 .left-side.clickToLG{
+  z-index: 99;
   position: fixed;
   height: 100%;
   width: 230px;
