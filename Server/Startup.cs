@@ -56,7 +56,7 @@ namespace Server
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                     .AddIdentityServerAuthentication(options =>
                     {
-                        options.Authority = "http://localhost:5000";
+                        options.Authority = "http://localhost:3000";
                         options.RequireHttpsMetadata = false;
 
                         options.ApiName = "ApiName";

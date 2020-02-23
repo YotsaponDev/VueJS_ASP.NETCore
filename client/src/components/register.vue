@@ -113,10 +113,6 @@
     methods: {
       ...mapActions("register", ["postData"]),
       register() {
-        console.log('this', this)
-        // this.$validator.validate().then(success => {
-        //   console.log('validate',success)
-        // });
         this.postData().then(res => {
 
         }).catch(err => {

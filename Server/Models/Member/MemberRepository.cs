@@ -68,7 +68,7 @@ namespace Todo.Models
 
             if(member == null)
             {
-                model.member_id = Guid.NewGuid();
+                //model.member_id = Guid.NewGuid();
                 model.password = StringToMD5(model.password);
                 _context.member.Add(model);
                 _context.SaveChanges();

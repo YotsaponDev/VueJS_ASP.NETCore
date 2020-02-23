@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from '@/service/index';
 
 const state = {
     data:[],
@@ -75,7 +75,7 @@ const getters = {
 const actions = {
     initData: (context,payload) => {
         return new Promise((resolve, reject) => {
-            axios.get(siteapi + "/api/register/"+payload).then(response => {
+            axios.get("/api/register/"+payload).then(response => {
                 context.commit("INIT_DATA", response.data)                
                 resolve(response);
             }, error => {
@@ -96,9 +96,10 @@ const actions = {
             updated_at: null
         }
         return new Promise((resolve, reject) => {
-            axios.post(siteapi + "/api/register", obj)
+            console.log(obj,axios); //ssss@sss.vob
+            axios.post("/api/Member", obj)
             .then(response => {
-                context.commit("ADD_DATA", obj)
+                // context.commit("ADD_DATA", obj)
                 resolve(response);
             }, error => {
                 reject(error);
@@ -107,7 +108,7 @@ const actions = {
     },
     updateData: (context) => {
         return new Promise((resolve, reject) => {
-            axios.put(siteapi + "/api/education/" + state.obj.member_id, {
+            axios.put("/api/Member/" + state.obj.member_id, {
                 firstname: state.obj.firstname,
                 lastname: state.obj.lastname,
                 birthday: state.obj.birthday,
@@ -126,7 +127,7 @@ const actions = {
     },
     deleteData: (context, payload) => {
         return new Promise((resolve, reject) => {
-            axios.delete(siteapi + "/api/register/" + payload)
+            axios.delete("/api/Member/" + payload)
             .then(response => {
                 context.commit("DELETE_DATA", payload)
                 resolve(response);

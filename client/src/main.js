@@ -12,15 +12,16 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { ValidationProvider, extend, ValidationObserver  } from 'vee-validate';
 import * as rules from 'vee-validate/dist/rules';
 import { messages } from 'vee-validate/dist/locale/th.json';
+import axios from './service/index';
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+Vue.prototype.$axios = axios;
 
 Object.keys(rules).forEach(rule => {
-  console.log('tag', rule)
   extend(rule, {
     
     ...rules[rule], // copies rule configuration
