@@ -1,32 +1,10 @@
 <template>
   <div id="app">
-      <layout v-if="auth"/>
-      <router-view v-if="!auth"/> 
+      <router-view/> 
   </div>
 </template>
 
-<script>
-import layout from './components/layout'
-export default {
-  components: {
-    layout
-  },
-  data() {
-    return {
-     auth: false
-    }
-  },
-  created() {
-    console.log('xxxxxxx', this)
-  },
-  methods: {
-    
-    },
-}
-</script>
-
 <style>
-
 body{
   background-color: #f1f1f1 !important;
   /* margin-left: 0px; */

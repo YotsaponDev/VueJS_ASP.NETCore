@@ -14,9 +14,9 @@
   } */
 </style>
 <template>
-  <ValidationObserver v-slot="{ handleSubmit }">
-    <div class="container">
-      <div class="vertical-center mt-3 mb-3">
+  <div class="container">
+    <ValidationObserver v-slot="{ handleSubmit }">
+      <div class="mt-3 mb-3">
         <b-card title="ลงทะเบียน" header-tag="nav">
           <template v-slot:header>
             <b-nav card-header tabs>
@@ -113,8 +113,8 @@
           </b-card-text>
         </b-card>
       </div>
-    </div>
-  </ValidationObserver>
+    </ValidationObserver>
+  </div>
 </template>
 
 <script>

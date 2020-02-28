@@ -21,12 +21,12 @@
     </div>
     <div :class="classContent">
       <div :class="classUserMenu">
-        <router-link v-on:click.native="ClickUserMenuAfter()" v-for="v in routerUser" :key="v.name" :to="v.link" 
+        <router-link v-for="v in routerUser" :key="v.name" to="" v-on:click.native="ClickUserMenuAfter(v.link)"
           tag="div" class="linkUserMenu">
           <i :class="v.icon"></i> {{v.name}}
         </router-link>  
       </div>
-      <router-view/> 
+        <slot/>
     </div>
   </div>
 </template>
@@ -65,12 +65,12 @@ export default {
       routerUser: [
         {
           name:"แก้ไขข้อมูลส่วนตัว",
-          link:"/user_config",
+          link:"user_config",
           icon:"fas fa-user-cog"
         },
         {
           name:"ออกจากระบบ",
-          link:"/logout",
+          link:"logout",
           icon:"fas fa-sign-out-alt"
         }
       ]
@@ -133,7 +133,7 @@ export default {
         this.classUserMenu = 'user-menu none'
       }
     },
-    ClickUserMenuAfter(){
+    ClickUserMenuAfter(name){
       this.iconUserMenuValue = false
       this.classUserMenu = 'user-menu none'
     },

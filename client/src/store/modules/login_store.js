@@ -66,6 +66,8 @@ const actions = {
             console.log(obj,axios); //ssss@sss.vob
             axios.post("/api/Member/login", obj)
             .then(response => {
+                console.log(response);    
+                localStorage.setItem('jwt',response.data.jwt_token);
                 // context.commit("ADD_DATA", obj)
                 resolve(response);
             }, error => {
