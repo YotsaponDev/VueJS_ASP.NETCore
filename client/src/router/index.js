@@ -9,7 +9,10 @@ const routes = [
   {
     path: '/',
     name: 'index',
-    component: () => import(/* webpackChunkName: "login" */ '../components/login.vue')
+    component: () => import(/* webpackChunkName: "index" */ '../components/index.vue'),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/about',

@@ -12,7 +12,7 @@
                 <b-card title="เข้าสู่ระบบ" body-class="text-center" header-tag="nav">
                     <template v-slot:header>
                         <b-nav card-header tabs>
-                            <b-nav-item to="/" exact exact-active-class="active">เข้าสู่ระบบ</b-nav-item>
+                            <b-nav-item to="/login" exact exact-active-class="active">เข้าสู่ระบบ</b-nav-item>
                             <b-nav-item to="/register">ลงทะเบียน</b-nav-item>
                         </b-nav>
                     </template>
@@ -77,10 +77,9 @@
             loginEvent() {
                 this.loadingActive = true
                 this.login().then(res => {
-                    console.log();
                     this.loadingActive = false
                     this.$router.push({
-                        name: 'about'
+                        name: 'index'
                     })
                 }).catch(err => {
                     this.loadingActive = false

@@ -18,7 +18,7 @@ import axios from './service/index';
 // var decoded = jwtDecode("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwOGQ3Yjg3YS1iYTVmLTg2YjItZmU3ZS02ODExNDBhMGZlNmIiLCJleHAiOjE1ODI3NDA1NjZ9.TlgZnoTPLaH4bZEvH9fgRF6cJ5ZUboEan-A4Aij98is");
 // console.log(decoded);
 
-import VueElementLoading from 'vue-element-loading'
+import VueElementLoading from 'vue-element-loading' //https://biigpongsatorn.github.io/#/vue-element-loading
 Vue.component('Loading', VueElementLoading)
 
 Vue.use(BootstrapVue)

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Loading spinner="line-wave" size="50" :active="loadingActive" :is-full-screen="true" color="#0099ff" />
     <div class="top-nav">
       <div class="icon-bar">
           <span v-show="iconBarValue" v-on:click="ClickIconBar()" class="icon-bar-icon bars">
@@ -35,6 +36,7 @@
 export default {
   data() {
     return {
+      loadingActive: false,
       classLeftSide: 'left-side',
       classContent: 'content',
       classLinkText: 'linkText',
@@ -50,11 +52,6 @@ export default {
           name:"หน้าแรก",
           link:"/",
           icon:"fas fa-home"
-        },
-        {
-          name:"ลงทะเบียน",
-          link:"/register",
-          icon:"fas fa-user-plus"
         },
         {
           name:"เกี่ยวกับ",
@@ -136,6 +133,17 @@ export default {
     ClickUserMenuAfter(name){
       this.iconUserMenuValue = false
       this.classUserMenu = 'user-menu none'
+      if(name == "logout"){
+        this.loadingActive = true
+        localStorage.removeItem('jwt');
+        setTimeout(() => {
+          this.loadingActive = false
+          this.$router.push({
+            name: 'login'
+          })
+        }, 1000);
+        
+      }
     },
     handleResize() {
       this.iconBarValue = false
