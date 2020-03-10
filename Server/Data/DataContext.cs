@@ -12,5 +12,6 @@ namespace Core.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options){}
 
         public DbSet<MemberEntity> member { get; set; }
+        public DbSet<PermissionEntity> permission { get; set; }
     }
 }

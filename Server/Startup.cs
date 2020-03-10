@@ -135,6 +135,7 @@ namespace Server
 
             //services.AddTransient<Models.Laws.ILaws, LawsRepository>();
             services.AddTransient<Models.Member.IMember, MemberRepository>();
+            services.AddTransient<Models.Permission.IPermission, PermissionRepository>();
 
             //services.AddDbContext<LawsContext>(options =>
             //   options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));

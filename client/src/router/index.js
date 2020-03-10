@@ -1,11 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import overview from '../components/overview.vue'
+
+var jwtDecode = require('jwt-decode');
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '*',
+    name: 'page-not-found',
+    component: () => import(/* webpackChunkName: "page-not-found" */ '../components/404.vue'),
+  },
   {
     path: '/',
     name: 'index',
@@ -31,7 +36,16 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "login" */ '../components/login.vue')
-  }
+  },
+  {
+    path: '/book',
+    name: 'book',
+    component: () => import(/* webpackChunkName: "about" */ '../components/book.vue'),
+    meta: {
+      requiresAuth: true,
+      permission: "staff"
+    }
+  },
 ]
 
 const router = new VueRouter({
@@ -41,9 +55,23 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const loggedIn = localStorage.getItem('jwt');
+  const jwt = localStorage.getItem('jwt');
+  var decoded = jwt == null ? null : jwtDecode(jwt);
+  
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (loggedIn) {
+    if (jwt) {
+      if(new Date().getTime() / 1000 > decoded.exp){
+        localStorage.removeItem('jwt');
+        next('/login')
+      }
+      if(to.matched.map(a=>a.meta.permission) == "staff"){
+        if(decoded.permission == "staff"){
+          next()
+        }else{
+          next('404')
+        }
+        
+      }
       next()
       return
     }

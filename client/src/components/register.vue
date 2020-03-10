@@ -15,6 +15,7 @@
 </style>
 <template>
   <div class="container">
+    <Loading spinner="line-wave" size="50" :active="loadingActive" :is-full-screen="true" color="#0099ff" />
     <ValidationObserver v-slot="{ handleSubmit }">
       <div class="mt-3 mb-3">
         <b-card title="ลงทะเบียน" header-tag="nav">
@@ -125,16 +126,18 @@
   export default {
     data() {
       return {
-        tempPassword: null
+        tempPassword: null,
+        loadingActive: false
       }
     },
     methods: {
       ...mapActions("register", ["postData"]),
       register() {
+        this.loadingActive = true
         this.postData().then(res => {
-
+          this.loadingActive = false
         }).catch(err => {
-
+          this.loadingActive = false
         })
       }
     },

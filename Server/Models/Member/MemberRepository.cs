@@ -71,6 +71,17 @@ namespace Todo.Models
                 //model.member_id = Guid.NewGuid();
                 model.password = StringToMD5(model.password);
                 _context.member.Add(model);
+
+                //add permission 
+                var permission = new PermissionEntity();
+
+                permission.permission_id = Guid.NewGuid();
+                permission.member_id = model.member_id;
+                permission.permission_type = "member";
+                permission.created_at = DateTime.Now;
+
+                _context.permission.Add(permission);
+
                 _context.SaveChanges();
 
                 model.password = null;
@@ -94,7 +105,7 @@ namespace Todo.Models
         {
             var checkPassword = StringToMD5(model.password);
             var member = _context.member.Where(x => x.email == model.email && x.password == checkPassword).FirstOrDefault();
-
+            var permission = _context.permission.Where(x => x.member_id == member.member_id).FirstOrDefault();
             if (member == null)
             {
                 throw new Exception();
@@ -103,8 +114,8 @@ namespace Todo.Models
             {
                 var claims = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Jti, member.member_id.ToString())
-                    //new Claim(JwtRegisteredClaimNames.NameId, member.username),
+                    new Claim(JwtRegisteredClaimNames.Jti, member.member_id.ToString()),
+                    new Claim("permission", permission.permission_type)
                     //new Claim(JwtRegisteredClaimNames.GivenName, member.firstname),
                     //new Claim(JwtRegisteredClaimNames.FamilyName, member.lastname),
                     //new Claim(JwtRegisteredClaimNames.Email, member.email)
@@ -113,7 +124,7 @@ namespace Todo.Models
                 var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
                 var token = new JwtSecurityToken(
-                    expires: DateTime.Now.AddSeconds(5),
+                    expires: DateTime.Now.AddSeconds(2000),
                     claims: claims,
                     signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
                     );

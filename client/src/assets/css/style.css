@@ -47,9 +47,9 @@
 }
 
 .user-menu{
-  position: absolute;
+  position: fixed;
   right: 18px;
-  top: 50px;
+  top: 70px;
   z-index: 99;
   padding: 10px;
   border-radius: 5px;
