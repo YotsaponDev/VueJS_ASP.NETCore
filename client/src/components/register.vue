@@ -1,18 +1,3 @@
-<style>
-  #errorValidate {
-    color: red;
-    font-size: 10pt;
-  }
-
-  /* .vertical-center {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-  } */
-</style>
 <template>
   <div class="container">
     <Loading spinner="line-wave" size="50" :active="loadingActive" :is-full-screen="true" color="#0099ff" />
@@ -136,8 +121,22 @@
         this.loadingActive = true
         this.postData().then(res => {
           this.loadingActive = false
+          this.$swal({
+            icon: 'success',
+            title: 'ลงทะเบียนสำเร็จ',
+            showConfirmButton: false,
+            timer: 3200
+          });
         }).catch(err => {
+          console.log(err);
+          
           this.loadingActive = false
+          this.$swal({
+            icon: 'error',
+            title: 'เกิดข้อผิดพลาด',
+            text: err.response.data,
+            footer: 'หรือติดต่อเจ้าหน้าที่'
+          });
         })
       }
     },

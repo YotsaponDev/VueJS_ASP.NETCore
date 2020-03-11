@@ -3,13 +3,9 @@ import axios from '@/service/index';
 const state = {
     data:[],
     obj: {
-        member_id: null,
-        firstname: null,
-        lastname: null,
-        birthday: null,
-        sex: null,
-        email: null,
-        password: null,
+        book_category_id: null,
+        code: null,
+        name: null,
 
         created_at: "",
         updated_at: ""
@@ -37,13 +33,9 @@ const mutations = {
     },
     CLEAR_OBJ: (state) => {
         state.obj = {
-            member_id: null,
-            firstname: null,
-            lastname: null,
-            birthday: null,
-            sex: null,
-            email: null,
-            password: null,
+            book_category_id: null,
+            code: null,
+            name: null,
     
             created_at: "",
             updated_at: ""
@@ -68,7 +60,7 @@ const getters = {
 const actions = {
     initData: (context,payload) => {
         return new Promise((resolve, reject) => {
-            axios.get("/api/register/"+payload).then(response => {
+            axios.get("/api/BookCategory").then(response => {
                 context.commit("INIT_DATA", response.data)                
                 resolve(response);
             }, error => {
@@ -78,21 +70,16 @@ const actions = {
     },
     postData: (context) => {
         const obj = {
-            firstname: state.obj.firstname,
-            lastname: state.obj.lastname,
-            birthday: state.obj.birthday,
-            sex: state.obj.sex,
-            email: state.obj.email,
-            password: state.obj.password,
+            code: state.obj.code,
+            name: state.obj.name,
 
             created_at: new Date(),
             updated_at: null
         }
         return new Promise((resolve, reject) => {
-            console.log(obj,axios); //ssss@sss.vob
-            axios.post("/api/Member", obj)
+            axios.post("/api/BookCategory", obj)
             .then(response => {
-                // context.commit("ADD_DATA", obj)
+                context.commit("ADD_DATA", obj)
                 resolve(response);
             }, error => {
                 reject(error);
@@ -101,13 +88,9 @@ const actions = {
     },
     updateData: (context) => {
         return new Promise((resolve, reject) => {
-            axios.put("/api/Member/" + state.obj.member_id, {
-                firstname: state.obj.firstname,
-                lastname: state.obj.lastname,
-                birthday: state.obj.birthday,
-                sex: state.obj.sex,
-                email: state.obj.email,
-                password: state.obj.password,
+            axios.put("/api/BookCategory/" + state.obj.book_category_id, {
+                code: state.obj.code,
+                name: state.obj.name,
                 updated_at: new Date()
             })
             .then(response => {
@@ -120,7 +103,7 @@ const actions = {
     },
     deleteData: (context, payload) => {
         return new Promise((resolve, reject) => {
-            axios.delete("/api/Member/" + payload)
+            axios.delete("/api/BookCategory/" + payload)
             .then(response => {
                 context.commit("DELETE_DATA", payload)
                 resolve(response);

@@ -14,12 +14,14 @@ import * as rules from 'vee-validate/dist/rules';
 import { messages } from 'vee-validate/dist/locale/th.json';
 import axios from './service/index';
 import jwt from 'jwt-decode';
+import VueSweetalert2 from 'vue-sweetalert2';
 
 import VueElementLoading from 'vue-element-loading' //https://biigpongsatorn.github.io/#/vue-element-loading
 Vue.component('Loading', VueElementLoading)
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
+Vue.use(VueSweetalert2);
 Vue.config.productionTip = false
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);

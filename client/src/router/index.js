@@ -40,7 +40,25 @@ const routes = [
   {
     path: '/book',
     name: 'book',
-    component: () => import(/* webpackChunkName: "about" */ '../components/book.vue'),
+    component: () => import(/* webpackChunkName: "book" */ '../components/book.vue'),
+    meta: {
+      requiresAuth: true,
+      permission: "staff"
+    }
+  },
+  {
+    path: '/book_category',
+    name: 'book_category',
+    component: () => import(/* webpackChunkName: "bookCategory" */ '../components/bookCategory/bookCategory.vue'),
+    meta: {
+      requiresAuth: true,
+      permission: "staff"
+    }
+  },
+  {
+    path: '/book_category_d/:id/:action',
+    name: 'book_category_d',
+    component: () => import(/* webpackChunkName: "bookCategory_d" */ '../components/bookCategory/bookCategory_d.vue'),
     meta: {
       requiresAuth: true,
       permission: "staff"

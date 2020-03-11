@@ -27,13 +27,6 @@ const mutations = {
     UPDATE_OBJ: (state, payload) => {
         state.obj = payload
     },
-    SET_FK_ID: (state, payload) => {
-        state.obj.employee_id = payload
-    },
-    SET_CHECKBOX: (state, payload) => {
-        state.obj.id = payload
-        state.obj.employee_id = payload
-    },
     CLEAR_OBJ: (state) => {
         state.obj = {
             email: null,
@@ -63,12 +56,9 @@ const actions = {
             password: state.obj.password,
         }
         return new Promise((resolve, reject) => {
-            console.log(obj,axios); //ssss@sss.vob
             axios.post("/api/Member/login", obj)
-            .then(response => {
-                console.log(response);    
+            .then(response => {  
                 localStorage.setItem('jwt',response.data.jwt_token);
-                // context.commit("ADD_DATA", obj)
                 resolve(response);
             }, error => {
                 reject(error);

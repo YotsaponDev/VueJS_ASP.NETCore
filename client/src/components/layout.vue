@@ -61,6 +61,12 @@ export default {
           icon:"fas fa-book"
         },
         {
+          name:"จัดการหมวดหมู่หนังสือ",
+          link:"/book_category",
+          routeName:"book_category",
+          icon:"fas fa-layer-group"
+        },
+        {
           name:"เกี่ยวกับ",
           link:"/about",
           routeName:"about",

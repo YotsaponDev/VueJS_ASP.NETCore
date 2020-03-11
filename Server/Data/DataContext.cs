@@ -13,5 +13,7 @@ namespace Core.Data
 
         public DbSet<MemberEntity> member { get; set; }
         public DbSet<PermissionEntity> permission { get; set; }
+        public DbSet<BookEntity> book { get; set; }
+        public DbSet<BookCategoryEntity> book_category { get; set; }
     }
 }

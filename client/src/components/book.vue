@@ -19,15 +19,7 @@
         }
       },
     mounted(){
-      console.log(this.$axios);
       
-     this.$axios.get('/api/Member')
-        .then((resp) => {
-            console.log(resp);
-        })
-        .catch(() => {
-            console.log('err:' , err);
-        });
     },
   }
 </script>

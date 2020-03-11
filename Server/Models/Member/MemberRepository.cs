@@ -91,7 +91,7 @@ namespace Todo.Models
             {
                 if (member.email == model.email)
                 {
-                    throw new Exception("Email already exists");
+                    throw new Exception("อีเมลนี้มีในระบบแล้ว");
                 }
                 else
                 {
