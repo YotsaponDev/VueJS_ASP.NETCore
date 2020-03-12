@@ -92,19 +92,16 @@ export default {
     this.handleResize();
 
     // check permission for menu
-    console.log("thidddddd ",this.$router.options.routes);
-    
-    console.log("xxxxx$jwtDecode",this.$jwtDecode(localStorage.getItem('jwt')));
     let jwt = this.$jwtDecode(localStorage.getItem('jwt'))
     if(jwt){
       if(jwt.permission != "staff"){
         this.$router.options.routes.map(x=>{
           if(typeof x.meta != 'undefined'){
             if(typeof x.meta.permission != 'undefined'){
-              if(x.meta.permission == "staff")
-              console.log("data=> ",x)
-              let index = this.routerName.findIndex(data => data.routeName == x.name)
-              this.routerName.splice(index, 1)
+              if(x.meta.permission == "staff"){
+                let index = this.routerName.findIndex(data => data.routeName == x.name)
+                this.routerName.splice(index, 1)
+              } 
             }
           }
           

@@ -38,6 +38,14 @@
           :fields="header" 
           :current-page="currentPage"
           :per-page="perPage">
+          <template v-slot:cell(book_category_id)="row">
+            <b-button size="sm" variant="warning" @click="viewEvent(row.item.book_category_id)" class="mr-1">
+              ดูข้อมูล
+            </b-button>
+            <b-button size="sm" variant="danger" @click="deleteEvent(row.item)" class="mr-1">
+              ลบ
+            </b-button>
+          </template>
         </b-table>
         <b-row>
           <div class="col-sm col-md col-lg col-xl">
@@ -68,7 +76,13 @@
     },
     data() {
       return {
-        header: [{
+        header: [
+          {
+            key: "book_category_id",
+            label: "จัดการ",
+            thStyle: {width: '144px',minWidth: '144px'}
+          },
+          {
             key: "code",
             sortable: true,
             label: "รหัสหมวดหมู่"
@@ -85,9 +99,9 @@
         loadingActive: false
       }
     },
-    created() {
+    async created() {
       this.loadingActive = true
-      this.initData().then(res => {
+      await this.initData().then(res => {
             this.loadingActive = false
       }).catch(err=>{
         this.loadingActive = false
@@ -100,6 +114,9 @@
       ...mapActions("book_category", ["initData"]),
       addEvent(){
         this.$router.push({ name: "book_category_d", params: { id: "_", action: "create" } });
+      },
+      viewEvent(val){
+        this.$router.push({ name: "book_category_d", params: { id: val, action: "update" } });
       }
     },
     computed: {

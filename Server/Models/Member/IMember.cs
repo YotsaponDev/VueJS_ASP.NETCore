@@ -9,6 +9,7 @@ namespace Server.Models.Member
     public interface IMember
     {
         List<MemberEntity> GetAll();
+        List<MemberEntity> GetMemberOnly();
         MemberEntity GetById(Guid id);
         MemberReturnViewModel GetByIdViaJWT(string authHeader);
         MemberEntity Create(MemberEntity model);

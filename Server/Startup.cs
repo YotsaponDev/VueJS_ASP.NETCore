@@ -53,15 +53,15 @@ namespace Server
                .AddAuthorization()
                .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                    .AddIdentityServerAuthentication(options =>
-                    {
-                        options.Authority = "http://localhost:3000";
-                        options.RequireHttpsMetadata = false;
+            //services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            //        .AddIdentityServerAuthentication(options =>
+            //        {
+            //            options.Authority = "http://localhost:3000";
+            //            options.RequireHttpsMetadata = false;
 
-                        options.ApiName = "ApiName";
-                        options.ApiSecret = "secret_for_the_api";
-                    });
+            //            options.ApiName = "ApiName";
+            //            options.ApiSecret = "secret_for_the_api";
+            //        });
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -110,34 +110,34 @@ namespace Server
                options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
 
             // configure jwt authentication
-            //string key = Configuration.GetSection("JWT").GetSection("SecurityKey").Value;
-            //services.AddAuthentication(x =>
-            //{
-            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //})
-            //.AddJwtBearer(x =>
-            //{
-            //    x.RequireHttpsMetadata = false;
-            //    x.SaveToken = true;
-            //    x.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-            //        ValidateIssuer = false,
-            //        ValidateAudience = false,
-            //        ValidateLifetime = true,
-            //        ClockSkew = TimeSpan.Zero
-            //    };
-            //});
+            string key = Configuration.GetSection("JWT").GetSection("SecurityKey").Value;
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    //ValidateLifetime = true,
+                    //ClockSkew = TimeSpan.Zero
+                };
+            });
 
-           
+
 
             //services.AddTransient<Models.Laws.ILaws, LawsRepository>();
-            services.AddTransient<Models.Member.IMember, MemberRepository>();
-            services.AddTransient<Models.Permission.IPermission, PermissionRepository>();
-            services.AddTransient<Models.BookCategory.IBookCategory, BookCategoryRepository>();
-            services.AddTransient<Models.Book.IBook, BookRepository>();
+            services.AddScoped<Models.Member.IMember, MemberRepository>();
+            services.AddScoped<Models.Permission.IPermission, PermissionRepository>();
+            services.AddScoped<Models.BookCategory.IBookCategory, BookCategoryRepository>();
+            services.AddScoped<Models.Book.IBook, BookRepository>();
             //services.AddDbContext<LawsContext>(options =>
             //   options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
         }

@@ -63,7 +63,7 @@ const actions = {
             axios.get("/api/BookCategory").then(response => {
                 context.commit("INIT_DATA", response.data)                
                 resolve(response);
-            }, error => {
+            }).catch(error => {
                 reject(error);
             });
         })
@@ -81,7 +81,7 @@ const actions = {
             .then(response => {
                 context.commit("ADD_DATA", obj)
                 resolve(response);
-            }, error => {
+            }).catch(error => {
                 reject(error);
             });
         })
@@ -94,9 +94,9 @@ const actions = {
                 updated_at: new Date()
             })
             .then(response => {
-                context.commit("UPDATE_DATA_BYID", payload)
+                context.commit("UPDATE_DATA_BYID", response.data)
                 resolve(response);
-            }, error => {
+            }).catch(error => {
                 reject(error);
             });
         })
@@ -107,7 +107,7 @@ const actions = {
             .then(response => {
                 context.commit("DELETE_DATA", payload)
                 resolve(response);
-            }, error => {
+            }).catch(error => {
                 reject(error);
             });
         })

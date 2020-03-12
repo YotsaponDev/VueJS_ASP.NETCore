@@ -54,17 +54,22 @@
         loadingActive: false
       }
     },
-    created() {
-      
+    async created() {
+      this.loadingActive = true
+      await this.initData().then(res => {
+            this.loadingActive = false
+      }).catch(err=>{
+        this.loadingActive = false
+      })
     },
     mounted(){
-      
+
     },
     beforeDestroy() {
       this.clearObj()
     },
     methods: {
-      ...mapActions("book_category", ["postData","updateData","clearObj"]),
+      ...mapActions("book_category", ["initData","postData","updateData","updateObj","clearObj"]),
       saveEvent() {
         if(this.$route.params.action.toLowerCase() == "create"){
           this.loadingActive = true
@@ -82,12 +87,27 @@
             });
           }).catch(err => {
             this.loadingActive = false
-            this.$swal({
-              icon: 'error',
-              title: 'เกิดข้อผิดพลาด',
-              text: err.response.data,
-              footer: 'หรือติดต่อเจ้าหน้าที่'
-            });
+            if(err.response){
+              if(err.response.status == 401){
+                this.$swal({
+                  icon: 'error',
+                  title: 'ไม่สามารถทำรายการได้',
+                  text: 'ผู้ใช้งานต้องทำการพิสูจน์ตัวตนก่อน'
+                });
+              }else{
+                this.$swal({
+                  icon: 'error',
+                  title: 'ไม่สามารถทำรายการได้',
+                  text: ''
+                });
+              }
+            }else{
+              this.$swal({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                footer: 'หรือติดต่อเจ้าหน้าที่'
+              });
+            }
           })
         }else if(this.$route.params.action.toLowerCase() == "update"){
           this.loadingActive = true
@@ -99,20 +119,33 @@
               showConfirmButton: false,
               timer: 2000
             }).then((result) => {
-              if(result.value){
                 this.$router.push({
                   name: 'book_category'
                 })
-              }
             });
           }).catch(err => {
             this.loadingActive = false
-            this.$swal({
-              icon: 'error',
-              title: 'เกิดข้อผิดพลาด',
-              text: err.response.data,
-              footer: 'หรือติดต่อเจ้าหน้าที่'
-            });
+            if(err.response){
+              if(err.response.status == 401){
+                this.$swal({
+                  icon: 'error',
+                  title: 'ไม่สามารถทำรายการได้',
+                  text: 'ผู้ใช้งานต้องทำการพิสูจน์ตัวตนก่อน'
+                });
+              }else{
+                this.$swal({
+                  icon: 'error',
+                  title: 'ไม่สามารถทำรายการได้',
+                  text: ''
+                });
+              }
+            }else{
+              this.$swal({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                footer: 'หรือติดต่อเจ้าหน้าที่'
+              });
+            }
           })
         }else{
           this.$swal({
@@ -161,8 +194,12 @@
     },
     watch: {
       data: function(val){
-        
-      }
+        console.log("daata");  
+        if(this.$route.params.action.toLowerCase() == "update"){
+          var obj = val.find(x=>x.book_category_id == this.$route.params.id)
+          this.updateObj(obj)
+        }
+      },
     },
   }
 </script>

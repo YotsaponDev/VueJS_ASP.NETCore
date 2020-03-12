@@ -48,11 +48,16 @@ namespace Todo.Models
         {
             var data = _context.book_category.Find(id);
 
-            data.updated_at = DateTime.Now;
+            modelUpdate.book_category_id = data.book_category_id;
+            modelUpdate.created_at = data.created_at;
+
+            data.code = modelUpdate.code;
+            data.name = modelUpdate.name;
+            data.updated_at = modelUpdate.updated_at;
 
             _context.SaveChanges();
 
-            return data;
+            return modelUpdate;
         }
 
         public BookCategoryEntity Delete(Guid book_category_id)

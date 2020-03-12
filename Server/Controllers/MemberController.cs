@@ -57,6 +57,34 @@ namespace Server.Controllers
         }
 
         /// <summary>
+        /// Member get all data
+        /// </summary>
+        /// <remarks>
+        /// Member get Member only
+        /// </remarks>
+        /// <returns>Return all data</returns>
+        /// <response code="200">Returns all data</response>
+        /// <response code="500">Error Occurred</response>  
+        [AllowAnonymous]
+        [HttpGet("GetMemberOnly")]
+        [ProducesResponseType(typeof(List<MemberViewModel>), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public IActionResult GetMemberOnly()
+        {
+            try
+            {
+                var data = _member.GetMemberOnly();
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical($"Exception while get list of items.", ex);
+                return StatusCode(500, $"Exception while get list of items. {ex.Message}");
+            }
+        }
+
+        /// <summary>
         /// Member get By Id
         /// </summary>
         /// <remarks>

@@ -31,6 +31,19 @@ namespace Todo.Models
             return _context.member.ToList();
         }
 
+        public List<MemberEntity> GetMemberOnly()
+        {
+            //return _context.member.ToList();
+            var data = (from m in _context.member
+                      join p in _context.permission
+                      on m.member_id equals p.member_id into a
+                      from f in a.DefaultIfEmpty()
+                      where f.permission_type == "member"
+                      select m).ToList();
+  
+            return data;
+        }
+
         public MemberEntity GetById(Guid id)
         {
             return _context.member.Find(id);
@@ -124,7 +137,7 @@ namespace Todo.Models
                 var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
                 var token = new JwtSecurityToken(
-                    expires: DateTime.Now.AddSeconds(2000),
+                    expires: DateTime.Now.AddSeconds(4000),
                     claims: claims,
                     signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
                     );
