@@ -40,7 +40,16 @@ const routes = [
   {
     path: '/book',
     name: 'book',
-    component: () => import(/* webpackChunkName: "book" */ '../components/book.vue'),
+    component: () => import(/* webpackChunkName: "book" */ '../components/book/book.vue'),
+    meta: {
+      requiresAuth: true,
+      permission: "staff"
+    }
+  },
+  {
+    path: '/book_d/:id/:action',
+    name: 'book_d',
+    component: () => import(/* webpackChunkName: "book_d" */ '../components/book/book_d.vue'),
     meta: {
       requiresAuth: true,
       permission: "staff"
@@ -49,7 +58,7 @@ const routes = [
   {
     path: '/book_category',
     name: 'book_category',
-    component: () => import(/* webpackChunkName: "bookCategory" */ '../components/bookCategory/bookCategory.vue'),
+    component: () => import(/* webpackChunkName: "book_category" */ '../components/book_category/book_category.vue'),
     meta: {
       requiresAuth: true,
       permission: "staff"
@@ -58,7 +67,7 @@ const routes = [
   {
     path: '/book_category_d/:id/:action',
     name: 'book_category_d',
-    component: () => import(/* webpackChunkName: "bookCategory_d" */ '../components/bookCategory/bookCategory_d.vue'),
+    component: () => import(/* webpackChunkName: "book_category_d" */ '../components/book_category/book_category_d.vue'),
     meta: {
       requiresAuth: true,
       permission: "staff"
