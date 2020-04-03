@@ -137,7 +137,7 @@ namespace Todo.Models
                 var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
                 var token = new JwtSecurityToken(
-                    expires: DateTime.Now.AddSeconds(4000),
+                    expires: DateTime.Now.AddHours(8),
                     claims: claims,
                     signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
                     );

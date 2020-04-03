@@ -10,8 +10,8 @@ namespace Server.Models.Book
     {
         List<BookEntity> GetAll();
         BookEntity GetById(Guid id);
-        BookEntity Create(BookEntity model);
-        BookEntity Update(Guid id, BookEntity modelUpdate);
+        BookViewModel Create(BookDataWithFile model);
+        BookEntity Update(Guid id, BookDataWithFile modelUpdate);
         BookEntity Delete(Guid id);
     }
 }

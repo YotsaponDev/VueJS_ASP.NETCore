@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Todo.Models
 {
-    public class BookViewModel
+    public class BookDataWithFile
     {
         public Guid book_id { get; set; }
 
@@ -24,11 +24,10 @@ namespace Todo.Models
 
         public int number_of_page { get; set; }
 
-        public string image { get; set; }
-
         public DateTime? created_at { get; set; }
 
         public DateTime? updated_at { get; set; }
 
+        public IEnumerable<IFormFile> image { get; set; }
     }
 }

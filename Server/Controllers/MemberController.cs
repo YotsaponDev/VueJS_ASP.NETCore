@@ -249,10 +249,10 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// Member Update item
+        /// Member Delete item
         /// </summary>
         /// <remarks>
-        /// Member Update item
+        /// Member Delete item
         /// </remarks>
         /// <returns>Return create item</returns>
         /// <response code="200">Returns the item</response>

@@ -22,7 +22,7 @@ const mutations = {
         state.data = payload
     },
     UPDATE_DATA_BYID: (state, payload) => {
-        const index = state.data.findIndex(data => data.id == payload.id)
+        const index = state.data.findIndex(data => data.book_id == payload.id)
         state.data.splice(index, 1)
         state.data.push(payload)
     },
@@ -30,7 +30,7 @@ const mutations = {
         state.data.push(payload)
     },
     DELETE_DATA: (state, payload) => {
-        const index = state.data.findIndex(data => data.id == payload)
+        const index = state.data.findIndex(data => data.book_id == payload)
         state.data.splice(index, 1)
     },
     UPDATE_OBJ: (state, payload) => {
@@ -79,40 +79,48 @@ const actions = {
         })
     },
     postData: (context) => {
-        const obj = {
-            name: state.obj.name,
-            detail: state.obj.detail,
-            author: state.obj.author,
-            publisher: state.obj.publisher,
-            book_category_id: state.obj.book_category_id,
-            number_of_page: state.obj.number_of_page,
-            image: state.obj.image,
+        let formData = new FormData();
 
-            created_at: new Date(),
-            updated_at: null
-        }
+        formData.append('name',state.obj.name);
+        formData.append('detail',state.obj.detail);
+        formData.append('author',state.obj.author);
+        formData.append('publisher',state.obj.publisher);
+        formData.append('book_category_id',state.obj.book_category_id);
+        formData.append('number_of_page',state.obj.number_of_page);
+        formData.append('image', state.obj.image); 
+
         return new Promise((resolve, reject) => {
-            axios.post("/api/Book", obj)
+            axios.post("/api/Book", formData,{
+                headers: {
+                    'Content-Type': "multipart/form-data",
+                }
+            })
             .then(response => {
-                context.commit("ADD_DATA", obj)
+                console.log("ss",response);
+                
+                context.commit("ADD_DATA", response.data)
                 resolve(response);
-            }).catch(error => {
+            }).catch(error => {         
                 reject(error);
             });
         })
     },
     updateData: (context) => {
-        return new Promise((resolve, reject) => {
-            axios.put("/api/Book/" + state.obj.book_category_id, {
-                name: state.obj.name,
-                detail: state.obj.detail,
-                author: state.obj.author,
-                publisher: state.obj.publisher,
-                book_category_id: state.obj.book_category_id,
-                number_of_page: state.obj.number_of_page,
-                image: state.obj.image,
-                
-                updated_at: new Date()
+        let formData = new FormData();
+
+        formData.append('name',state.obj.name);
+        formData.append('detail',state.obj.detail);
+        formData.append('author',state.obj.author);
+        formData.append('publisher',state.obj.publisher);
+        formData.append('book_category_id',state.obj.book_category_id);
+        formData.append('number_of_page',state.obj.number_of_page);
+        formData.append('image', state.obj.image); 
+
+        return new Promise((resolve, reject) => { 
+            axios.put("/api/Book/" + state.obj.book_id, formData,{
+                headers: {
+                    'Content-Type': "multipart/form-data",
+                }
             })
             .then(response => {
                 context.commit("UPDATE_DATA_BYID", response.data)
@@ -126,9 +134,13 @@ const actions = {
         return new Promise((resolve, reject) => {
             axios.delete("/api/Book/" + payload)
             .then(response => {
+                console.log("res",response);
+                
                 context.commit("DELETE_DATA", payload)
                 resolve(response);
             }).catch(error => {
+                console.log("err",error);
+                
                 reject(error);
             });
         })

@@ -17,7 +17,7 @@ const mutations = {
         state.data = payload
     },
     UPDATE_DATA_BYID: (state, payload) => {
-        const index = state.data.findIndex(data => data.id == payload.id)
+        const index = state.data.findIndex(data => data.book_category_id == payload.id)
         state.data.splice(index, 1)
         state.data.push(payload)
     },
@@ -25,7 +25,7 @@ const mutations = {
         state.data.push(payload)
     },
     DELETE_DATA: (state, payload) => {
-        const index = state.data.findIndex(data => data.id == payload)
+        const index = state.data.findIndex(data => data.book_category_id == payload)
         state.data.splice(index, 1)
     },
     UPDATE_OBJ: (state, payload) => {

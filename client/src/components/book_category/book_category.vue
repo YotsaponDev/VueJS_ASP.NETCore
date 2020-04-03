@@ -117,6 +117,39 @@
       },
       viewEvent(val){
         this.$router.push({ name: "book_category_d", params: { id: val, action: "update" } });
+      },
+      deleteEvent(val){
+        this.$swal({
+          icon: 'question',
+          title: 'คุณต้องการที่จะลบรายการนี้ ?',
+          showConfirmButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'ตกลง',
+          cancelButtonText: 'ยกเลิก',
+        }).then((result) => {
+          if (result.value) {
+            this.loadingActive = true
+            this.deleteData(val).then(res=>{
+            this.loadingActive = false
+            this.$swal({
+              icon: 'success',
+              title: 'สำเร็จ',
+              html: 'ลบรายการที่คุณต้องการลบแล้ว',
+              showConfirmButton: false,
+              timer: 3000
+            })
+          }).catch(err=>{
+            this.loadingActive = false
+            this.$swal({
+              icon: 'error',
+              title: 'ผิดผพลาด',
+              html: 'กรุณาลองใหม่อีกครั้ง หรือติดต่อเจ้าหน้าที่',
+              showConfirmButton: false,
+              timer: 3000
+            })
+          })  
+          }
+        })
       }
     },
     computed: {

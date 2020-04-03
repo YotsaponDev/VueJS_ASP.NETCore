@@ -1,6 +1,6 @@
 <template>
      <div>
-         <ValidationProvider class="float-center" name="หมวดหมู่" v-slot="{ errors }" rules="required">
+         <ValidationProvider class="float-center" :name="pName" v-slot="{ errors }" rules="required">
 
                 <b-form-select v-model="select" :options="options"
                     :value-field="pValueField" :text-field="pTextField">
@@ -14,7 +14,7 @@
 <script>
 import { mapActions , mapGetters } from "vuex";
 export default {
-    props: ["pStore","pKey","pValueField","pTextField","pType","pData"],
+    props: ["pStore","pKey","pValueField","pTextField","pType","pData","pName"],
     data() {
       return {
         options: []

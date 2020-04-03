@@ -153,10 +153,10 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// BookCategory Update item
+        /// BookCategory Delete item
         /// </summary>
         /// <remarks>
-        /// BookCategory Update item
+        /// BookCategory Delete item
         /// </remarks>
         /// <returns>Return create item</returns>
         /// <response code="200">Returns the item</response>

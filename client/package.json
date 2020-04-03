@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "urlApi": "https://localhost:44300",
   "scripts": {
     "dev": "vue-cli-service serve --port 3000",
     "build": "vue-cli-service build"

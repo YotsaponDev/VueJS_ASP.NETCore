@@ -2,7 +2,7 @@
   <layout>
     <div class="container">
       <Loading spinner="line-wave" size="50" :active="loadingActive" :is-full-screen="true" color="#0099ff" />
-      <b-card title="จัดการหมวดหมู่หนังสือ" body-class="text-center">
+      <b-card title="จัดการหนังสือ" body-class="text-center">
         <b-row>
           <div class="col col-sm-6 col-md-5 col-lg-5 col-xl-4 mb-2">
             <b-form-group
@@ -42,10 +42,16 @@
             <b-button size="sm" variant="warning" @click="viewEvent(row.item.book_id)" class="mr-1">
               ดูข้อมูล
             </b-button>
-            <b-button size="sm" variant="danger" @click="deleteEvent(row.item)" class="mr-1">
+            <b-button size="sm" variant="danger" @click="deleteEvent(row.item.book_id)" class="mr-1">
               ลบ
             </b-button>
           </template>
+          <template v-slot:cell(image)="data">
+            <b-img-lazy 
+              v-bind="{ width: 120 }"
+              :src="$urlApi+'/api/Book/Image?book_id='+data.item.book_id+'&image_name='+ data.item.image" 
+              fluid alt="Responsive image"></b-img-lazy>
+        </template>
         </b-table>
         <b-row>
           <div class="col-sm col-md col-lg col-xl">
@@ -119,12 +125,45 @@
       
     },
     methods: {
-      ...mapActions("book", ["initData"]),
+      ...mapActions("book", ["initData","deleteData"]),
       addEvent(){
         this.$router.push({ name: "book_d", params: { id: "_", action: "create" } });
       },
       viewEvent(val){
         this.$router.push({ name: "book_d", params: { id: val, action: "update" } });
+      },
+      deleteEvent(val){
+        this.$swal({
+          icon: 'question',
+          title: 'คุณต้องการที่จะลบรายการนี้ ?',
+          showConfirmButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'ตกลง',
+          cancelButtonText: 'ยกเลิก',
+        }).then((result) => {
+          if (result.value) {
+            this.loadingActive = true
+            this.deleteData(val).then(res=>{
+            this.loadingActive = false
+            this.$swal({
+              icon: 'success',
+              title: 'สำเร็จ',
+              html: 'ลบรายการที่คุณต้องการลบแล้ว',
+              showConfirmButton: false,
+              timer: 3000
+            })
+          }).catch(err=>{
+            this.loadingActive = false
+            this.$swal({
+              icon: 'error',
+              title: 'ผิดผพลาด',
+              html: 'กรุณาลองใหม่อีกครั้ง หรือติดต่อเจ้าหน้าที่',
+              showConfirmButton: false,
+              timer: 3000
+            })
+          })  
+          }
+        })
       }
     },
     computed: {

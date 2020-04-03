@@ -12,6 +12,8 @@ using Todo.Models;
 using Server.Models.Book;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Server.Controllers
 {
@@ -51,7 +53,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while get list of items.", ex);
+                //_logger.LogCritical($"Exception while get list of items.", ex);
                 return StatusCode(500, $"Exception while get list of items. {ex.Message}");
             }
         }
@@ -79,7 +81,44 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while get list of items.", ex);
+                //_logger.LogCritical($"Exception while get list of items.", ex);
+                return StatusCode(500, $"Exception while get list of items. {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Book get By Id
+        /// </summary>
+        /// <remarks>
+        /// Book get By Id
+        /// </remarks>
+        /// <returns>Return all data</returns>
+        /// <response code="200">Returns the item</response>
+        /// <response code="500">Error Occurred</response>  
+        [AllowAnonymous]
+        [HttpGet("Image")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> Iamge(Guid book_id,string image_name)
+        {
+            try
+            {
+                if (book_id == null || image_name == null)
+                {
+                    return null;
+                }
+                var folderName = Path.Combine("Resources", "Images", book_id.ToString(), image_name);
+                var pathImage = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                var image = System.IO.File.OpenRead(pathImage);
+
+                string[] file_type = image_name.Split('.');
+
+                return File(image, "image/"+ file_type[file_type.Length-1]);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogCritical($"Exception while get list of items.", ex);
                 return StatusCode(500, $"Exception while get list of items. {ex.Message}");
             }
         }
@@ -98,7 +137,7 @@ namespace Server.Controllers
         [ProducesResponseType(typeof(List<BookViewModel>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
-        public IActionResult Create([FromBody] BookEntity model)
+        public IActionResult Create([FromForm] BookDataWithFile model)
         {
             try
             {
@@ -128,10 +167,10 @@ namespace Server.Controllers
         /// <response code="200">Returns the item</response>
         /// <response code="500">Error Occurred</response>  
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(List<BookViewModel>), 200)]
+        [ProducesResponseType(typeof(List<BookEntity>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public IActionResult Update(Guid id, [FromBody] BookEntity model)
+        public IActionResult Update(Guid id, [FromForm] BookDataWithFile model)
         {
             try
             {
@@ -147,22 +186,22 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while get list of items.", ex);
+                //_logger.LogCritical($"Exception while get list of items.", ex);
                 return StatusCode(500, $"Exception while get list of items. {ex.Message}");
             }
         }
 
         /// <summary>
-        /// Book Update item
+        /// Book Delete item
         /// </summary>
         /// <remarks>
-        /// Book Update item
+        /// Book Delete item
         /// </remarks>
         /// <returns>Return create item</returns>
-        /// <response code="200">Returns the item</response>
+        /// <response code="204">No Content</response>
         /// <response code="500">Error Occurred</response>  
         [HttpDelete("{id}")]
-        [ProducesResponseType(typeof(List<BookViewModel>), 200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult Delete(Guid id)
@@ -175,13 +214,13 @@ namespace Server.Controllers
                 }
                 else
                 {
-                    var res = _book.Delete(id);
-                    return Json(res);
+                    _book.Delete(id);
+                    return StatusCode(204, "No Content");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while get list of items.", ex);
+                //_logger.LogCritical($"Exception while get list of items.", ex);
                 return StatusCode(500, $"Exception while get list of items. {ex.Message}");
             }
         }

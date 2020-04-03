@@ -50,7 +50,7 @@
             <b-row>
               <b-col sm="7" class="mb-2 mb-sm-3">
                 <label class="mr-sm-2">หมวดหมู่</label>
-                <FormSelect pStore="book" pKey="book_category_id" pValueField="book_category_id" 
+                <FormSelect pStore="book" pKey="book_category_id" pValueField="book_category_id" pName="หมวดหมู่"
                   pTextField="name" pType="link" pData="/api/bookCategory"></FormSelect>
               </b-col>
               <b-col sm="5" class="mb-2 mb-sm-3">
@@ -61,6 +61,13 @@
                   </b-form>
                   <span id="errorValidate">{{ errors[0] }}</span>
                 </ValidationProvider>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col sm="6" class="mb-2 mb-sm-3">
+                <label class="mr-sm-2">รูปภาพหน้าปก</label>
+                <FormFile pStore="book" pKey="image" pName="รูปภาพหน้าปก"
+                  pAccept=".jpg, .jpeg, .png" pRequired="required"></FormFile>
               </b-col>
             </b-row>
             <b-row>
@@ -83,11 +90,12 @@
 <script>
   import { mapActions , mapGetters } from "vuex";
   import layout from '@/components/layout'
-  import { FormSelect } from '@/components/form'
+  import { FormSelect, FormFile } from '@/components/form'
   export default {
     components: {
       layout,
-      FormSelect
+      FormSelect,
+      FormFile
     },
     data() {
       return {
@@ -281,18 +289,6 @@
         },
         set(data) {
           var key = "number_of_page"
-          this.$store.commit('book/UPDATE_OBJ_BY_KEY', {
-            key,
-            data
-          })
-        }
-      },
-      image: {
-        get() {
-          return this.obj.image
-        },
-        set(data) {
-          var key = "image"
           this.$store.commit('book/UPDATE_OBJ_BY_KEY', {
             key,
             data

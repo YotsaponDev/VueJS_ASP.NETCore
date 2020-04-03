@@ -47,7 +47,7 @@ const routes = [
     }
   },
   {
-    path: '/book_d/:id/:action',
+    path: '/book/book_d/:id/:action',
     name: 'book_d',
     component: () => import(/* webpackChunkName: "book_d" */ '../components/book/book_d.vue'),
     meta: {
@@ -65,7 +65,7 @@ const routes = [
     }
   },
   {
-    path: '/book_category_d/:id/:action',
+    path: '/book_category/book_category_d/:id/:action',
     name: 'book_category_d',
     component: () => import(/* webpackChunkName: "book_category_d" */ '../components/book_category/book_category_d.vue'),
     meta: {

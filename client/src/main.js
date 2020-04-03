@@ -16,6 +16,8 @@ import axios from './service/index';
 import jwt from 'jwt-decode';
 import VueSweetalert2 from 'vue-sweetalert2';
 
+var pjson = require('../package.json');
+
 import VueElementLoading from 'vue-element-loading' //https://biigpongsatorn.github.io/#/vue-element-loading
 Vue.component('Loading', VueElementLoading)
 
@@ -27,6 +29,7 @@ Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.prototype.$axios = axios;
 Vue.prototype.$jwtDecode = jwt;
+Vue.prototype.$urlApi = pjson.urlApi;
 
 Object.keys(rules).forEach(rule => {
   extend(rule, {
